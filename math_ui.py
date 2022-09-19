@@ -184,10 +184,6 @@ QSlider::sub-page:horizontal {
     def setDifficulty(self, difficulty):
         self.math_difficultySlider.setValue(difficulty)
 
-    # def updateScore(self):
-    #     pass
-
-
 class Math_Play(QWidget):
     def __init__(self, main_ui):
         super().__init__()

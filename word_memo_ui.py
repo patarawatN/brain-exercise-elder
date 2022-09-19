@@ -162,16 +162,6 @@ QSlider::sub-page:horizontal {
 
     def changeDifficulty(self):
         difficulty = self.difficulty_slider.value()
-        # if difficulty == 0:
-        #     self.difficulty_number.setText("3 คำ")
-        # elif difficulty == 1:
-        #     self.difficulty_number.setText("4 คำ")
-        # elif difficulty == 2:
-        #     self.difficulty_number.setText("5 คำ")
-        # elif difficulty == 3:
-        #     self.difficulty_number.setText("6 คำ")
-        # else:
-        #     self.difficulty_number.setText("7 คำ")
         self.difficulty_number.setText("{0} คำ".format(difficulty + 3))
         self.difficulty = difficulty
 
@@ -226,29 +216,8 @@ class Word_Memo(QWidget):
         
         self.gridLayout = QGridLayout()
 
+        # Component will be generated
         
-
-        # These component will be generated
-        # self.label_12 = QLabel()
-        # self.gridLayout.addWidget(self.label_12, 0, 0, 1, 1)
-        # self.label_16 = QLabel(self.wordmemo_memoryPage)
-        # self.label_16.setObjectName("label_16")
-        # self.gridLayout.addWidget(self.label_16, 1, 0, 1, 1)
-        # self.label_15 = QLabel(self.wordmemo_memoryPage)
-        # self.label_15.setObjectName("label_15")
-        # self.gridLayout.addWidget(self.label_15, 2, 0, 1, 1)
-        # self.label_18 = QLabel(self.wordmemo_memoryPage)
-        # self.label_18.setObjectName("label_18")
-        # self.gridLayout.addWidget(self.label_18, 1, 1, 1, 1)
-        # self.label_19 = QLabel(self.wordmemo_memoryPage)
-        # self.label_19.setObjectName("label_19")
-        # self.gridLayout.addWidget(self.label_19, 2, 1, 1, 1)
-        # self.label_17 = QLabel(self.wordmemo_memoryPage)
-        # self.label_17.setObjectName("label_17")
-        # self.gridLayout.addWidget(self.label_17, 0, 1, 1, 1)
-        # self.label_20 = QLabel(self.wordmemo_memoryPage)
-        # self.label_20.setObjectName("label_20")
-        # self.gridLayout.addWidget(self.label_20, 3, 0, 1, 1)
         self.verticalLayout.addLayout(self.gridLayout)
 
         
