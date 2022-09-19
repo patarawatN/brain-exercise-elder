@@ -46,4 +46,4 @@ if __name__ == "__main__":
     main_window.show()
     sys.exit(app.exec_())
     # shutdown
-    # os.system("shutdown now -h")
+    os.system("sudo shutdown -h now")

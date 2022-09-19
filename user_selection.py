@@ -197,4 +197,4 @@ class User_Seletion(QWidget):
                 self.changePage(2)
 
         def shutDown(self):
-                os.system("shutdown now -h")
+                os.system("sudo shutdown -h now")
