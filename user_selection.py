@@ -2,7 +2,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QListWidget
 from PyQt5.QtGui import QFont
 
-import os, json, datetime
+import os, json, datetime, sys
+from pathlib import Path
 
 class User_Seletion(QWidget):
         def __init__(self, main_ui):
@@ -156,6 +157,8 @@ class User_Seletion(QWidget):
                 self.userSelection_list.clear()
                 # fetch list 
                 path_to_json = 'user/'
+                if not os.path.exists(path_to_json):
+                        os.makedirs(path_to_json)
                 self.users = []
                 for file in os.listdir(path_to_json):
                         if file.endswith('.json'):
@@ -197,4 +200,5 @@ class User_Seletion(QWidget):
                 self.changePage(2)
 
         def shutDown(self):
+                sys.exit()
                 os.system("sudo shutdown -h now")
