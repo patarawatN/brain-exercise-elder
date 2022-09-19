@@ -44,6 +44,6 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     main_window = App()
     main_window.show()
-    sys.exit(app.exec_())
+    # sys.exit(app.exec_())
     # shutdown
     os.system("sudo shutdown -h now")
