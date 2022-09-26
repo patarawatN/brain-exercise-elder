@@ -251,6 +251,11 @@ class Word_Memo(QWidget):
 
         self.connectEvent()
 
+        with open("home/pi/brain-exercie-elder/data/words.TXT","r") as file:
+                words = file.read()
+        word_list = words.split('\n')
+        self.word_list = word_list
+
     def connectEvent(self):
         self.next_button.clicked.connect(self.toWordMemPlay)
 
@@ -271,10 +276,10 @@ class Word_Memo(QWidget):
         max_col = 2
         positions = [(row,col) for row in range(max_row) for col in range(max_col)]
 
-        with open("data/words.TXT","r") as file:
-                words = file.read()
-        word_list = words.split('\n')
-        shuffle(word_list)
+        # with open("data/words.TXT","r") as file:
+                # words = file.read()
+        # word_list = words.split('\n')
+        word_list = shuffle(self.word_list)
         self.word_toPlay = sample(word_list, int(difficulty * 2))
         self.word_memo = sample(self.word_toPlay, difficulty)
         self.time_start = datetime.now()
