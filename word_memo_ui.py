@@ -399,7 +399,7 @@ class Word_Play(QWidget):
         cheering_word = ""
         max_score = len(correct_list)
         if score == max_score * 5:
-            cheering_word = "พ่อๆแม่ๆทำได้ดีมากแล้วพยายามทำแบบฝึกเป็นประจำด้วยนะ"
+            cheering_word = "พ่อๆแม่ๆทำได้ดีแล้วพยายามทำแบบฝึกเป็นประจำด้วยนะ"
         elif score >= max_score * 3:
             cheering_word = "พ่อๆแม่ๆยังพลาดไปบ้าง แต่ก็ทำได้ดีมากแล้วนะ"
         elif score >= max_score * 2:
@@ -407,7 +407,7 @@ class Word_Play(QWidget):
         elif score >= max_score * 1:
             cheering_word = "พ่อๆแม่ๆยังพลาดไปบ้างไม่ก็ข้าไป แต่ก็ทำได้ดีมากแล้วนะ"
         elif score >= 0:
-            cheering_word = "พ่อๆแม่ๆทำได้ดีแล้ว ค่อยๆทำให้ถูกต้องไม่ก็เร็วขึ้นด้วยนะ"
+            cheering_word = "พ่อๆแม่ๆทำได้ดีแล้ว ค่อยๆทำให้ถูกต้องด้วยนะ"
         result_text = "การเล่นล่าสุด\nใช้เวลา {0} นาที {1} วินาที (โบนัสคะแนนคูณ {6}) จำถูก {4} คำ จำผิด {5} คำ \nได้ {2} คะแนน ({3})".format(time_played_minute, time_played_second, score, cheering_word, score_right, score_panalty, score_multiplier)
         wordTitle_ui = self.main_ui.stackedWidget.widget(5)
         wordTitle_ui.last_play.setText(result_text)

@@ -418,7 +418,7 @@ class Math_Play(QWidget):
             cheering_word = ""
             max_score = self.arithmetic.numberOfQuestion * 5
             if score_after_bonus == max_score:
-                cheering_word = "พ่อๆแม่ๆทำได้ดีมากแล้วพยายามทำแบบฝึกเป็นประจำด้วยนะ"
+                cheering_word = "พ่อๆแม่ๆทำได้ดีแล้วพยายามทำแบบฝึกเป็นประจำด้วยนะ"
             elif score_after_bonus >= max_score * 0.8:
                 cheering_word = "พ่อๆแม่ๆยังพลาดไปบ้าง แต่ก็ทำได้ดีมากแล้วนะ"
             elif score_after_bonus >= max_score * 0.6:
@@ -426,7 +426,7 @@ class Math_Play(QWidget):
             elif score_after_bonus >= max_score * 0.4:
                 cheering_word = "พ่อๆแม่ๆยังพลาดไปบ้างไม่ก็ข้าไป แต่ก็ทำได้ดีมากแล้วนะ"
             elif score_after_bonus >= 0:
-                cheering_word = "พ่อๆแม่ๆทำได้ดีแล้ว ค่อยๆทำให้ถูกต้องไม่ก็เร็วขึ้นด้วยนะ"
+                cheering_word = "พ่อๆแม่ๆทำได้ดีแล้ว ค่อยๆทำให้ถูกต้องด้วยนะ"
             result_text = "การเล่นล่าสุด\nถูก {5} ข้อ ใช้เวลา {0} นาที {1} วินาที (คะแนนคูณ {2})\nได้ {3} คะแนน ({4})".format(time_played_minute, time_played_second, score_multiplier, score_after_bonus, cheering_word, self.score)
             mathTitle_ui.math_lateststatisitc.setText(result_text)
             # savefile

@@ -2,8 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QListWidget
 from PyQt5.QtGui import QFont
 
-import os, json, datetime, sys
-from pathlib import Path
+import os, json, datetime
 
 class User_Seletion(QWidget):
         def __init__(self, main_ui):
@@ -156,7 +155,7 @@ class User_Seletion(QWidget):
                 # clear list
                 self.userSelection_list.clear()
                 # fetch list 
-                path_to_json = 'user/'
+                path_to_json = 'home/pi/brain-exercie-elder/user/'
                 if not os.path.exists(path_to_json):
                         os.makedirs(path_to_json)
                 self.users = []
