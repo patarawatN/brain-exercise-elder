@@ -26,7 +26,7 @@ class App(QWidget):
         mainLayout.addWidget(self.stackedWidget)
         self.setLayout(mainLayout)
         first_page_index = 0
-        if len([f for f in os.listdir("/home/pi/brain-exercie-elder/user/") if f.endswith('.json')]) > 0:
+        if len([f for f in os.listdir("/home/pi/brain-exercise-elder/user/") if f.endswith('.json')]) > 0:
             first_page_index = 1
         self.stackedWidget.setCurrentIndex(first_page_index) # will change to if there is some file
         self.setWindowTitle("ระบบบริหารสมองอัจฉริยะ")
