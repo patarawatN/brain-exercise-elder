@@ -155,7 +155,7 @@ class User_Seletion(QWidget):
                 # clear list
                 self.userSelection_list.clear()
                 # fetch list 
-                path_to_json = 'home/pi/brain-exercie-elder/user/'
+                path_to_json = '/home/pi/brain-exercie-elder/user/'
                 if not os.path.exists(path_to_json):
                         os.makedirs(path_to_json)
                 self.users = []

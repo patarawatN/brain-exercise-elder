@@ -251,7 +251,7 @@ class Word_Memo(QWidget):
 
         self.connectEvent()
 
-        with open("home/pi/brain-exercie-elder/data/words.TXT","r") as file:
+        with open("/home/pi/brain-exercie-elder/data/words.TXT","r") as file:
                 words = file.read()
         word_list = words.split('\n')
         self.word_list = word_list
