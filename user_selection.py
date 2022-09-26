@@ -144,7 +144,7 @@ class User_Seletion(QWidget):
                 self.userSelection_selectButton.clicked.connect(self.logIn)
                 self.userSelection_createNewButton.clicked.connect(self.toCreatePage)
                 # shut down
-                # self.userSelection_quit.clicked.connect(self.shutDown)
+                self.userSelection_quit.clicked.connect(self.shutDown)
 
 
         def changePage(self, index):
