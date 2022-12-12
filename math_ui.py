@@ -182,6 +182,8 @@ QSlider::sub-page:horizontal {
         self.difficulty = difficulty
 
     def setDifficulty(self, difficulty):
+        if difficulty > 4:
+            difficulty == 4
         self.math_difficultySlider.setValue(difficulty)
 
 class Math_Play(QWidget):
@@ -296,7 +298,7 @@ class Math_Play(QWidget):
 "}")
         self.math_previousButton.setAutoDefault(True)
         self.math_previousButton.setText("ข้อก่อนหน้า")
-        self.math_playButton.addWidget(self.math_previousButton)
+        # self.math_playButton.addWidget(self.math_previousButton)
 
         self.math_nextButton = QPushButton()
         self.math_nextButton.setEnabled(False)
@@ -328,6 +330,7 @@ class Math_Play(QWidget):
         self.math_nextButton.setAutoDefault(True)
         self.math_nextButton.setText("ข้อถัดไป")
         self.math_playButton.addWidget(self.math_nextButton)
+        self.math_playButton.addWidget(self.math_previousButton)
 
         self.verticalLayout.addLayout(self.math_playButton)
 
@@ -354,6 +357,9 @@ class Math_Play(QWidget):
         self.main_ui.changePage(index)
 
     def toMathTitle(self):
+        math_title = self.main_ui.stackedWidget.widget(3)
+        next_difficulty = math_title.difficulty + 1
+        math_title.setDifficulty(next_difficulty)
         self.changePage(3)
 
     def startQuiz(self,difficulty):
@@ -441,10 +447,10 @@ class Math_Play(QWidget):
             user = self.main_ui.user
             user['math_game']['play_history'].append(record_stat)
             # change difficulty
-            if len(user['math_game']['play_history']) % 5 == 0:
-                user['word_memory_game']['recommend_difficulty'] += 1
-            if (user['word_memory_game']['recommend_difficulty'] > 4):
-                user['word_memory_game']['recommend_difficulty'] = 4
+            # if len(user['math_game']['play_history']) % 5 == 0:
+            #     user['word_memory_game']['recommend_difficulty'] += 1
+            # if (user['word_memory_game']['recommend_difficulty'] > 4):
+            #     user['word_memory_game']['recommend_difficulty'] = 4
             save_data = user.copy()
             file_path = save_data.pop('filename')
             with open(file_path, "w") as outfile:
@@ -529,10 +535,10 @@ class Arithmetic:
                     num.append(self.randomNextSubtraction(num[-1]+num[-2]))
                 elif ops == '-+':
                     num.append(self.randomNextSubtraction(num[-1]))
-                    num.append(self.randomNextAddition(max,num[-2]-num[-1]))
+                    num.append(self.randomNextAddition(max,abs(num[-2]-num[-1])))
                 else:
                     num.append(self.randomNextSubtraction(num[-1]))
-                    num.append(self.randomNextSubtraction(num[-2]-num[-1]))
+                    num.append(self.randomNextSubtraction(abs(num[-2]-num[-1])))
                 self.question.append(self.createQuestion(num,ops))
                 ans =self.calculateAnswer(num,ops)
                 self.answer.append(ans)
@@ -569,10 +575,10 @@ class Arithmetic:
                     num.append(self.randomNextSubtraction(num[-1]+num[-2]))
                 elif ops == '-+':
                     num.append(self.randomNextSubtraction(num[-1]))
-                    num.append(self.randomNextAddition(max,num[-2]-num[-1]))
+                    num.append(self.randomNextAddition(max,abs(num[-2]-num[-1])))
                 else:
                     num.append(self.randomNextSubtraction(num[-1]))
-                    num.append(self.randomNextSubtraction(num[-1]))
+                    num.append(self.randomNextSubtraction(abs(num[-2]-num[-1])))
                 self.question.append(self.createQuestion(num,ops))
                 ans =self.calculateAnswer(num,ops)
                 self.answer.append(ans)
@@ -598,10 +604,10 @@ class Arithmetic:
                         num.append(self.randomNextSubtraction(num[-1]+num[-2]))
                     elif ops == '-+':
                         num.append(self.randomNextSubtraction(num[-1]))
-                        num.append(self.randomNextAddition(max,num[-2]-num[-1]))
+                        num.append(self.randomNextAddition(max,abs(num[-2]-num[-1])))
                     else: # if ops == '--'
                         num.append(self.randomNextSubtraction(num[-1]))
-                        num.append(self.randomNextSubtraction(num[-2]-num[-1]))
+                        num.append(self.randomNextSubtraction(abs(num[-2]-num[-1])))
                 else: # if ops == 'x'
                     max = 9
                     num = []

@@ -40,8 +40,10 @@ class Game_Selection(QWidget):
 
         self.verticalLayout_description = QVBoxLayout()
         self.description_image_label = QLabel()
-        self.description_image_math = QPixmap('/home/pi/brain-exercise-elder/data/image/pay-gd00e9afc9_1280.jpg')
-        self.description_image_word = QPixmap('/home/pi/brain-exercise-elder/data/image/words.jpg')
+        image_directory = '/home/pi/brain-exercise-elder/data/image/'
+        # image_directory = 'data/image/'
+        self.description_image_math = QPixmap(image_directory +'pay-gd00e9afc9_1280.jpg')
+        self.description_image_word = QPixmap(image_directory +'words.jpg')
         self.description_image_label.setPixmap(self.description_image_math)
         self.description_image_label.setScaledContents(True)
         self.description_image_label.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Ignored)

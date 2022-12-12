@@ -139,6 +139,7 @@ class User_Creation(QWidget):
         file_name = name + "__" + now
         file_name = datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S") + "_" + str(hash(file_name))
         file_location = "/home/pi/brain-exercise-elder/user/" + file_name + ".json"
+        # file_location = "user/" + file_name + ".json"
         with open(file_location, "w") as outfile:
                 json.dump(user, outfile, ensure_ascii=False)
         self.userCreation_formNameInput.clear()

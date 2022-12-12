@@ -166,6 +166,8 @@ QSlider::sub-page:horizontal {
         self.difficulty = difficulty
 
     def setDifficulty(self, difficulty):
+        if difficulty > 4:
+            difficulty == 4
         self.difficulty_slider.setValue(difficulty)
         self.difficulty = difficulty
 
@@ -251,10 +253,14 @@ class Word_Memo(QWidget):
 
         self.connectEvent()
 
-        with open("/home/pi/brain-exercise-elder/data/words.TXT","r") as file:
+        text_directory = '/home/pi/brain-exercise-elder/data/words.TXT'
+        # text_directory = 'data/words.TXT'
+        with open(text_directory,"r") as file:
                 words = file.read()
         word_list = words.split('\n')
         self.word_list = word_list.copy()
+        self.max_number_of_set = 10
+        self.number_of_set = 0
 
     def connectEvent(self):
         self.next_button.clicked.connect(self.toWordMemPlay)
@@ -264,7 +270,7 @@ class Word_Memo(QWidget):
 
     def toWordMemPlay(self):
         wordPlay_ui = self.main_ui.stackedWidget.widget(7)
-        wordPlay_ui.generateChoice(self.word_toPlay)
+        wordPlay_ui.generateChoice(self.word_toPlay[self.number_of_set])
         self.clearLayout(self.gridLayout)
         self.changePage(7)
 
@@ -275,16 +281,32 @@ class Word_Memo(QWidget):
             max_row += 1
         max_col = 2
         positions = [(row,col) for row in range(max_row) for col in range(max_col)]
-
+        self.positions = positions
         # with open("data/words.TXT","r") as file:
                 # words = file.read()
         # word_list = words.split('\n')
         word_list = self.word_list.copy()
         shuffle(word_list)
-        self.word_toPlay = sample(word_list, int(difficulty * 2))
-        self.word_memo = sample(self.word_toPlay, difficulty)
+        # create list word to play
+        self.word_toPlay = []
+        # self.word_toPlay = sample(word_list, int(difficulty * 2))
+        for i in range(self.max_number_of_set):
+            self.word_toPlay.append(sample(word_list, int(difficulty * 2)))
+        # for each element creat list word to remember
+        self.word_memo = []
+        for set_of_word in self.word_toPlay:
+            self.word_memo.append(sample(set_of_word, difficulty))
+        # self.word_memo = sample(self.word_toPlay, difficulty)
         self.time_start = datetime.now()
-        for position,word in zip(positions,self.word_memo):
+        self.createWordLayout()
+        # prepare for word layout
+        # for position,word in zip(positions,self.word_memo):
+        #         label = QLabel(word)
+        #         label.setFont(self.font)
+        #         self.gridLayout.addWidget(label,*position)
+
+    def createWordLayout(self):
+        for position,word in zip(self.positions,self.word_memo[self.number_of_set]):
                 label = QLabel(word)
                 label.setFont(self.font)
                 self.gridLayout.addWidget(label,*position)
@@ -362,6 +384,7 @@ class Word_Play(QWidget):
         self.setLayout(self.verticalLayout)
 
         self.connnectEvent()
+        self.answer = []
 
     def connnectEvent(self):
         self.submit_button.clicked.connect(self.submit)
@@ -370,75 +393,103 @@ class Word_Play(QWidget):
         self.main_ui.changePage(index)
 
     def toWordTitle(self):
+        self.answer = []
         self.clearLayout(self.gridLayout)
         self.changePage(5)
+
+    def toWordMemo(self):
+        self.clearLayout(self.gridLayout)
+        self.changePage(6)
 
     def submit(self):
         answer_list = []
         for checkbox in self.checkBox_list:
             if checkbox.isChecked():
                 answer_list.append(checkbox.text())
+        self.answer.append(answer_list)
         wordMemo_ui = self.main_ui.stackedWidget.widget(6)
-        correct_list = wordMemo_ui.word_memo
-        score_right = len(set(answer_list).intersection(set(correct_list)))
-        score_panalty = len(set(answer_list).difference(set(correct_list)))
-        score = score_right - score_panalty
-        if score < 0 :
-                score = 0
-        accuracy = (score / len(correct_list)) * 100
-        time_start = wordMemo_ui.time_start
-        time_played = datetime.now() - time_start
-        time_played = int(time_played.total_seconds())
-        # score multiplier
-        score_multiplier = 1
-        if time_played <= 20:
-            score_multiplier = 5
-        elif time_played <= 30:
-            score_multiplier = 3
-        elif time_played <= 45:
-            score_multiplier = 2
-        elif time_played <= 60:
+        wordMemo_ui.number_of_set += 1
+        if wordMemo_ui.number_of_set < wordMemo_ui.max_number_of_set:
+            wordMemo_ui.createWordLayout()
+            self.toWordMemo()
+        else:
+            wordMemo_ui.number_of_set = 0
+            wordMemo_ui = self.main_ui.stackedWidget.widget(6)
+            correct_list = wordMemo_ui.word_memo
+            score_right = 0
+            score_panalty = 0
+            number_of_word = 0
+            for answer,checked_word in zip(self.answer,correct_list):
+                score_right += len(set(answer).intersection(set(checked_word)))
+                score_panalty += len(set(answer).difference(set(checked_word)))
+                number_of_word += len(checked_word)
+            score = score_right - score_panalty
+            if score < 0 :
+                    score = 0
+            accuracy = (score / number_of_word) * 100
+            time_start = wordMemo_ui.time_start
+            time_played = datetime.now() - time_start
+            time_played = int(time_played.total_seconds())
+            # score multiplier
             score_multiplier = 1
-        score = score * score_multiplier
-        time_played_minute = int(time_played / 60)
-        time_played_second = int(time_played % 60)
-        cheering_word = ""
-        max_score = len(correct_list)
-        if score == max_score * 5:
-            cheering_word = "พ่อๆแม่ๆทำได้ดีแล้วพยายามทำแบบฝึกเป็นประจำด้วยนะ"
-        elif score >= max_score * 3:
-            cheering_word = "พ่อๆแม่ๆยังพลาดไปบ้าง แต่ก็ทำได้ดีมากแล้วนะ"
-        elif score >= max_score * 2:
-            cheering_word = "พ่อๆแม่ๆยังช้าไปบ้าง แต่ก็ทำได้ดีมากแล้วนะ"
-        elif score >= max_score * 1:
-            cheering_word = "พ่อๆแม่ๆยังพลาดไปบ้างไม่ก็ข้าไป แต่ก็ทำได้ดีมากแล้วนะ"
-        elif score >= 0:
-            cheering_word = "พ่อๆแม่ๆทำได้ดีแล้ว ค่อยๆทำให้ถูกต้องด้วยนะ"
-        result_text = "การเล่นล่าสุด\nใช้เวลา {0} นาที {1} วินาที (โบนัสคะแนนคูณ {6}) จำถูก {4} คำ จำผิด {5} คำ \nได้ {2} คะแนน ({3})".format(time_played_minute, time_played_second, score, cheering_word, score_right, score_panalty, score_multiplier)
-        wordTitle_ui = self.main_ui.stackedWidget.widget(5)
-        wordTitle_ui.last_play.setText(result_text)
-        record_stat = {
-                            "date":time_start.isoformat(),
-                                "time":time_played,
-                                "score":score,
-                                "accuracy":accuracy,
-                                "right":score_right,
-                                "wrong":score_panalty,
-                            "difficulty":wordTitle_ui.difficulty
-                        }
-        # print(record_stat)
-        user = self.main_ui.user
-        user['word_memory_game']['play_history'].append(record_stat)
-        # change difficulty
-        if len(user['word_memory_game']['play_history']) % 5 == 0:
-            user['word_memory_game']['recommend_difficulty'] += 1
-        if (user['word_memory_game']['recommend_difficulty'] > 4):
-            user['word_memory_game']['recommend_difficulty'] = 4
-        save_data = user.copy()
-        file_path = save_data.pop('filename')
-        with open(file_path, "w") as outfile:
-                json.dump(save_data, outfile, ensure_ascii=False)
-        self.toWordTitle()
+            if time_played <= 20 * wordMemo_ui.max_number_of_set:
+                score_multiplier = 5
+            elif time_played <= 30 * wordMemo_ui.max_number_of_set:
+                score_multiplier = 3
+            elif time_played <= 45 * wordMemo_ui.max_number_of_set:
+                score_multiplier = 2
+            elif time_played <= 60 * wordMemo_ui.max_number_of_set:
+                score_multiplier = 1
+            score = score * score_multiplier
+            time_played_minute = int(time_played / 60)
+            time_played_second = int(time_played % 60)
+            cheering_word = ""
+            max_score = len(correct_list)
+            if score == max_score * 5:
+                cheering_word = "พ่อๆแม่ๆทำได้ดีแล้วพยายามทำแบบฝึกเป็นประจำด้วยนะ"
+            elif score >= max_score * 3:
+                cheering_word = "พ่อๆแม่ๆยังพลาดไปบ้าง แต่ก็ทำได้ดีมากแล้วนะ"
+            elif score >= max_score * 2:
+                cheering_word = "พ่อๆแม่ๆยังช้าไปบ้าง แต่ก็ทำได้ดีมากแล้วนะ"
+            elif score >= max_score * 1:
+                cheering_word = "พ่อๆแม่ๆยังพลาดไปบ้างไม่ก็ข้าไป แต่ก็ทำได้ดีมากแล้วนะ"
+            elif score >= 0:
+                cheering_word = "พ่อๆแม่ๆทำได้ดีแล้ว ค่อยๆทำให้ถูกต้องด้วยนะ"
+            # print(record_stat)
+            user = self.main_ui.user
+            # change difficulty
+
+            wordTitle_ui = self.main_ui.stackedWidget.widget(5)
+            # if len(user['word_memory_game']['play_history']) % 10 == 0:
+            #     user['word_memory_game']['recommend_difficulty'] += 1
+            #     cheering_word = "พ่อๆแม่ๆเล่นมาสักพักแล้ว ขอเพิ่มระดับความยากขึ้นนะ"
+            # if (user['word_memory_game']['recommend_difficulty'] > 4):
+            #     cheering_word = "พ่อๆแม่ๆเล่นมาพอแล้ว พักกันก่อนเถอะ"
+            #     user['word_memory_game']['recommend_difficulty'] = 4
+            # difficulty = user['word_memory_game']['recommend_difficulty']
+            wordTitle_ui.setDifficulty(wordTitle_ui.difficulty + 1)
+            result_text = "การเล่นล่าสุด\nใช้เวลา {0} นาที {1} วินาที (โบนัสคะแนนคูณ {6}) จำถูก {4} คำ จำผิด {5} คำ \nได้ {2} คะแนน ({3})".format(time_played_minute, time_played_second, score, cheering_word, score_right, score_panalty, score_multiplier)
+
+            wordTitle_ui.last_play.setText(result_text)
+            record_stat = {
+                                "date":time_start.isoformat(),
+                                    "time":time_played,
+                                    "score":score,
+                                    "accuracy":accuracy,
+                                    "right":score_right,
+                                    "wrong":score_panalty,
+                                "difficulty":wordTitle_ui.difficulty
+                            }
+            user['word_memory_game']['play_history'].append(record_stat)
+            # save data
+            save_data = user.copy()
+            file_path = save_data.pop('filename')
+            with open(file_path, "w") as outfile:
+                    json.dump(save_data, outfile, ensure_ascii=False)
+            self.toWordTitle()
+    
+    # def nextSetOfWord():
+    #     pass
 
     def generateChoice(self, word_list):
         num = len(word_list)
